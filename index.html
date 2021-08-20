@@ -1,134 +1,319 @@
-<!-- 
-  Merger v0.21.1 - Merge Your Qrcode Together. Even Quicker.
-  User docs: https://docs.justhx.com/merger
-  Released under GNU General Public License v3.0. Open source at https://github.com/hifocus/merger.
-  Author @hifocus (https://github.com/hifocus), @LF112 (https://github.com/LF112)
-  Please preserve the copywrite notices above as required by the license.
- -->
-<!DOCTYPE html>
-
+<!DOCTYPE HTML>
 <html>
+	<head>
+		<title>Untitled</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script src="js/vue.min.js" language="JavaScript"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/html2canvas.min.js" async="async"></script>
+	</head>
 
-<head>
-    <title></title><!-- There is no need to set the page title manually -->
-    <meta charset="utf-8">
-    <meta name="author" content="Huangxin, LF112" />
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <!-- Upgrade HTTP Connections to HTTPS - Default -->
-    <link rel="shortcut icon" type="image/x-icon" id="favicon"><!-- There is no need to set the page icon manually -->
+	<body class="is-preload">
 
-    <!-- Load style files from jsDelivr - Default -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/gh/hifocus/merger@0.21.1/assets/styles/spectre.css/spectre-modified.min.css,gh/hifocus/merger@0.21.1/assets/styles/style.min.css">
+		<!-- Loader -->
+		<link rel="stylesheet" href="assets/css/loader.css" />
+		<div class="loader">
+		  <div class="container">
+		    <h1>🍊</h1>
+		    <p>摇匀</p>
+		    <p>再喝</p>
+		  </div>
+		</div>
+		
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-    <!-- Load style files from local -->
-    <!-- <link rel="stylesheet" href="assets/styles/spectre.css/spectre-modified.min.css">
-    <link rel="stylesheet" href="assets/styles/style.css"> -->
-</head>
+				<!-- Main -->
+					<section id="main">
+						<!-- Screenshot Button -->
+						<span style="display: flex; position: fixed; top: 2em; right: 2em; opacity: 0.65; font-size: 0.8em;" v-show="backButton"><button class="button small" @click="screenShot" id="screenshot">保存网页截图</button></span>
 
-<body>
+						<!-- Welcome Message and Contacts -->
+						<header v-show="Contacts">
+							<span class="avatar"><img src="images/avatar.jpg" alt="" style="width: 122px; height: 122px;" /></span>
+							<h1>Untitled</h1>
+							<transition-group name="fade">
+								<div v-show="defaults" key="text">
+									<p>Lorem</p>
+									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore facere accusamus quae nesciunt at fuga dicta vitae quidem reiciendis. Quos blanditiis corporis vel iusto reprehenderit ratione distinctio fugiat quae sed.</p>
+									<button class="button small fit" @click="showAbout" v-bind:disabled="onTransition==1">Click!</button>
+								</div>
+								<div v-for="item in contacts" v-if="item.show" key="item.name" v-html="item.content"></div>
+								<button class="button small" key="button" @click="hideContact(true)" style="opacity: 0.55;" v-show="backButton">返回</button>
+							</transition-group>
+						</header>
+						<hr />
+						<footer v-show="Contacts">
+							<ul class="icons">
+								<li v-for="item in contacts"><a @click="showContact(item.name)" :class="item.icon">{{item.desc}}</a></li>
+							</ul>
+						</footer>
 
-    <script>
-        // Config Section - Please follow the instruction
-        // Please read the document - https://docs.justhx.com/merger
+						<!-- Page container -->
+						<header v-show="info">
+							<transition-group name="fade">
+								<h1 key="title">{{ title }}</h1>
+								<p key="text" v-for="text in texts">{{ text }}</p>
+								<div v-html="html" key="html"></div>
+								<img v-bind:src="img" key="img" style="width: 95%; height: auto;" v-for="img in imgs" />
+								<div key="buttons">
+									<button class="button small" v-bind:disabled="(nowPage < startPage || onTransition==1)" @click="navigate(-1)">上一页</button>
+									<button class="button small" v-bind:disabled="(nowPage >= endPage - 2 || onTransition==1)" @click="navigate(1)">下一页</button>
+								</div>
+								<hr key="br" />
+								<button @click="returnToContact" key="button" class="button fit" v-bind:disabled="onTransition==1">返回</button>
+							</transition-group>
+						</header>
+					</section>
 
-        // Replace with your preferred name and profile photo link below
-        // Please note the multilingual support function enabled by default below
-        var myname = "傲";
-        var profile = "/assets/image/logo.png"; // Enter a image url or your gravatar email, or leave the variable blank to use the default avatar
-     // var profile = "https://ae01.alicdn.com/kf/H0b798980349e4042bd9dabb1acc79cb6U.jpg";
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="copyright" style="opacity: 0.5;">
+							<li><a href="#">&copy; Untitled</a></li><li><small>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a></small></li><li>Background: <a href="http://unsplash.com" target="_blank">Unsplash</a></li>
+						</ul>
+						<ul class="copyright" style="opacity: 0.5;">
+							<li>Untitled</li><li><a href="https://beian.miit.gov.cn/" target="_blank">备案号</a></li>
+							<li><iframe src="" style="height: 1.5em; width: 5em; border-radius: 0;" name="GitHubStar"></iframe></li>
+						</ul>
+					</footer>
 
-        // If you do not own any of the payment methods below, or do not want them to be published, just leave the variable empty or delete it to prevent confusion
-        var usage = "payment"; // Available variables: `payment`, `donate`, ineffective if multilingual is disabled
-        var wechat = "wxp://f2f0LF0L4J1kzUbL64yYZ5h7Wc57vk0lzJ35";
-        var alipay = "https://qr.alipay.com/fkx08479fhmvtirqid34oad";
-        var tenpay = "https://i.qianbao.qq.com/wallet/sqrcode.htm?m=tenpay&f=wallet&a=1&ac=CAEQnqXlogMYtamo8AU%3D_xxx_sign&u=878269086&n=MrCr";
-       // var paypal = "https://paypal.me/webu";
+			</div>
 
-        // Multilingual Support
-        var multilingual = true; // Set variable to false to disable multilingual feature
-        var myname_hans = myname // Default setting for Chinese Simplified users; change it to a speicify value if needed
-        var myname_hant = "傲"; // Choose how you want your name to be displayed for Traditional Chinese users
-        var myname_eng = "Mr.Lian"; // Choose how you want your name to be displayed for English / Non-Chinese users
+		<!-- Scripts -->
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { 
+						document.body.className = document.body.className.replace(/\bis-preload\b/, '');
+						document.querySelector("iframe[name='GitHubStar']").src = "https://ghbtns.com/github-btn.html?user=Jiaocz&repo=Personal-page&type=star&count=false";
+					});
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+		<!-- Vuejs -->
+			<script language="javascript">
+				var mainsec = new Vue({
+					el:'#main',
+					data:{
+						title:"", // The title of one page
+						html:"", // HTML text of one page
+						texts:[], // Pure texts of one page
+						imgs:[], // Image url of a page's images
+						
+						startPage: 1, // First page of the website
+						endPage: 3, // The last page of the website
+						
+						defaults: 1, // Show welcome message
+						Contacts:1, // Detect if to show contacts
+						info:0, // If to show designed pages
+						deg:0, // Main section rotate deg
 
-        // Dynamic Page Title Supoort
-        // Merger now supports dynamic page tile, however it's your freedom to choose whether you want to brand merger
-        // If you set branding to true, there will be a `| Merger` added after the preset page title
-        var branding = true; // Set variable to `false` to disable branding
+						backButton:false,
 
-        // Customise pay instruction
-        // Will only be effective if multilingual function is disabled
-        var title = "选择你的支付方式";
-        var subtitle = "跟随进一步的指示以向" + myname + "付款"; // Do not change the `myname` variable here
+						/*          Change things below this line               */
+						//Contact info
+						contacts:[
+							{
+								name:"Wechat",
+								icon:"icon brands fa-weixin",
+								desc:"微信",
+								content:"<img src='images/demoQR.png' class='qr' />",
+								show:false
+							},
+							{
+								name:"QQ",
+								icon:"icon brands fa-qq",
+								desc:"QQ",
+								content:"<img src='images/demoQR.png' class='qr' /><h2>QQ:XXXXXX</h2>",
+								show:false
+							},
+							{
+								name:"Github",
+								icon:"icon brands fa-github",
+								desc:"Github",
+								content:"<br /><a href='#' target='_blank'><img src='https://img.shields.io/badge/Github-Someone-brightgreen.svg' alt='Github' /></a><br /><a href=\"#\" target=\"_blank\">[Github](https://Github.com/Someone)</a>",
+								show:false
+							}
+						],
 
-        // QQ Mobile wouldn't decode qrcode from `data:image`, so for qq mobile only speical qrcode that generate from qrcode api is necessary
-        var qrcodeapi = "https://www.zhihu.com/qrcode?url=https://i.qianbao.qq.com/wallet/sqrcode.htm?m=tenpay&f=wallet&a=1&ac=CAEQnqXlogMYtamo8AU%3D_xxx_sign&u=878269086&n=MrCr"; // Please note that the API has to support HTTPS connection otherwise will not be loaded
-        var gravatar_url = "https://secure.gravatar.com/avatar/"; // You can choose your preferred gravatar mirror here; defaulted to official source
-    </script>
+						//Pages content
+						page:[
+							{
+								title:"Page 1",
+								texts:["Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore facere accusamus quae nesciunt at fuga dicta vitae quidem reiciendis. Quos blanditiis corporis vel iusto reprehenderit ratione distinctio fugiat quae sed."],
+								html:"",
+								imgs:["images/bg.jpg"]
+							},
+							{
+								title:"Page 2",
+								texts:["Some text","And some text"],
+								html:"<h2>HTML Support</h2>",
+								imgs:[""]
+							},
+							{
+								title:"Page 3",
+								texts:["Multi images"],
+								imgs:["images/bg.jpg","images/demoQR.png"],
+								html:""
+							},
+							{
+								title:"Page 4",
+								texts:["Another Demo"],
+								html:"<a onclick=\"todonate()\" style=\"color:#fff; background-color:#f0a1a8; border-radius: 0.3em; padding: 0.2em; cursor: pointer;\"><<u>Donate!</u>></a><br /><p style=\"color:#ccc; font-size:0.7em;\">Last updated: Apr. 14, 2021<p>",
+								imgs:[""]
+							},
+							{
+								title:"Eastern egg page!",
+								texts:["Can only access with ?page=#"],
+								html:"<a href='https://github.com/Jiaocz/Personal-page' target='_blank'>Origin project</a>"
+							}
+						],
+						/*            Change ends here                 */
 
-    <div class="main" id="h">
-        <i id="i"></i>
+						nowPage:0, // Pointer to current page
+						onTransition:0 //If the transition animation is on
+					},
+					methods: {
+						showContact: function(name){
+							let num = 0
+							for(let i = 0; i < this.contacts.length; i++){
+								if(this.contacts[i].name == name){
+									num = i
+									break
+								}
+							}
+							
+							this.hideContact(false)
+							this.defaults = 0
+							clearTimeout(this.timer)
+							this.timer = setTimeout(()=>{
+								this.contacts[num].show = true
+								this.backButton = true
+							},500)
+							
+						},
+						hideContact: function(neededDefault = true){
+							for(i = 0; i < this.contacts.length; i++){
+								this.contacts[i].show = false
+							}
+							clearTimeout(this.timer)
+							if(neededDefault == true){
+								this.backButton = false
+								this.timer = setTimeout(()=>{
+									this.defaults = 1
+								},500)
+							}
+							
+						},
+						showAbout: function(){
+							this.rotateCard(-360,1,"Y")
 
-        <div class="texts">
-        <h2 id="name"></h2>
-        <p id="description"></p>
-        </div>
-
-        <!-- Button Section Starts -->
-        <div id="pending">
-            <p id="depends" class="middlebtn">
-                <a href="#showqrcode" class="btn btn-primary" id="tenpaybtn" onclick="opentenpay()"><svg class="icon"
-                        aria-hidden="true">
-                        <use xlink:href="#icon-QQ"></use>
-                    </svg></a>
-                <a href="#showqrcode" class="btn btn-primary" id="toclick" onclick="openwechat()"><svg class="icon"
-                        aria-hidden="true">
-                        <use xlink:href="#icon-weixinzhifu"></use>
-                    </svg></a>
-                <a href="#showqrcode" class="btn btn-primary" id="alipaybtn" onclick="openalipay()"><svg class="icon"
-                        aria-hidden="true">
-                        <use xlink:href="#icon-iconfontrectangle390"></use>
-                    </svg></a>
-                <button class="btn btn-primary" id="paypalbtn" onclick="openbox()"><svg class="icon paypal-wide"
-                        aria-hidden="true">
-                        <use xlink:href="#icon-paypal"></use>
-                    </svg></button>
-            </p>
-        </div>
-    </div>
-
-        <!-- Button Section Ends -->
-
-        <!-- Modal Section Starts -->
-        <div class="modal" id="showqrcode">
-            <div class="modal-container" role="document">
-                <div class="modal-header" id="btncontainer">
-                    <a href="#" class="btn btn-clear float-right" id="qrcodeclose" aria-label="Close"></a>
-                    <div id="titleinfo" class="modal-title h5" style="text-align: center"></div>
-                </div>
-                <div class="modal-body">
-                    <div class="content" id="qrcontainer">
-                        <div id="currentqrcode" class="img smaller"></div>
-                        <img id="tenpayonly" class="img smaller">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal Section Ends -->
-
-
-
-    <!-- Footer Scripts -->
-    <!-- Please do not swap orders -->
-    <!-- Load Javascript files from jsDelivr - Default -->
-    <script src="https://cdn.jsdelivr.net/combine/gh/hifocus/merger@0.21.1/assets/js/jQuery/jquery.min.js,gh/hifocus/merger@0.21.1/assets/js/jquery-qrcode/jquery-qrcode.min.js,gh/hifocus/merger@0.21.1/assets/js/JavaScript_MD5/md5.min.js,gh/hifocus/merger@0.21.1/assets/js/function.min.js,gh/hifocus/merger@0.21.1/assets/js/font_974919_xgtacm93vxp.min.js"></script>
-
-    <!-- Load Javascript files from local -->
-    <!-- <script src="assets/js/jQuery/jquery.min.js"></script>
-    <script src="assets/js/jquery-qrcode/jquery-qrcode.min.js"></script>
-    <script src="assets/js/JavaScript_MD5/md5.min.js"></script>
-    <script src="assets/js/function.js"></script>
-    <script src="assets/js/font_974919_xgtacm93vxp.js"></script> -->
-</body>
-
+							var that = this
+							setTimeout(function(){
+								that.info = 1
+								that.Contacts = 0
+							},400)
+						},
+						returnToContact: function(){
+							this.rotateCard(360,1,"Y")
+							var that = this
+							setTimeout(function(){
+								that.info = 0
+								that.Contacts = 1
+							},400)
+						},
+						rotateCard: function(deg,time,axis){
+							this.onTransition = 1
+							this.deg += deg
+							var ele = document.getElementById('main')
+							ele.style.transition = "transform " + time + "s 0s"
+							ele.style.transform = "rotate" + axis + "(" +this.deg + "deg)"
+							var that = this
+							setTimeout(function(){that.onTransition = 0},time*1000)
+						},
+						loadPage: function(){
+							this.title = this.page[this.nowPage].title
+							this.texts = this.page[this.nowPage].texts
+							this.html = this.page[this.nowPage].html
+							this.imgs = this.page[this.nowPage].imgs
+						},
+						navigate: function(m){
+							if(m==1){
+								this.nowPage++
+								this.rotateCard(-360,1,"Y")
+								setTimeout("mainsec.loadPage()",400)
+							}
+							if(m==-1){
+								this.nowPage--
+								this.rotateCard(+360,1,"Y")
+								setTimeout("mainsec.loadPage()",400)
+							}
+						},
+						screenShot: function(){
+							var button = document.getElementById("screenshot");
+							var imgbase64;
+							button.disabled = true;
+							button.innerHTML = "截图中…";
+							html2canvas(document.querySelector("body")).then(canvas => {
+								canvas.style.display="none";
+								document.body.appendChild(canvas);
+							});
+							setTimeout(function(){
+								imgbase64 = document.querySelector("canvas").toDataURL('image/jpg');
+								var w = window.open();
+								w.document.title = "保存截图";
+								var i = w.document.createElement("img");
+								w.document.body.appendChild(i);
+								i.src = imgbase64;
+								document.querySelector("canvas").remove();
+								w.alert("长按图片或直接保存图片即可");
+								button.innerHTML = "保存网页截图";
+								button.disabled = false;
+							},800);
+								
+						}
+					},
+					mounted:function(){
+						this.loadPage()
+						this.startPage = 1
+						this.endPage = this.page.length
+					}
+				});
+			</script>
+			<style>
+				.fade-enter-active, .fade-leave-active {
+					transition: all .5s;
+				}
+				.fade-enter, .fade-leave-to {
+					opacity: 0;
+					transform: scale(0%,0%);
+				}
+				.qr {
+					text-align: center;
+					width: 80%;
+					height: 80%;
+				}
+			</style>
+			<script>
+				function loaded(){
+					var page = getQueryVariable("page");
+					if(page>=mainsec.startPage-1&&page<=mainsec.endPage-1&&page){
+						var m = mainsec
+						mainsec.nowPage = page - 1;
+						setTimeout(function(){
+							m.rotateCard(-360,1,"Y")
+							setTimeout(function(){
+								m.loadPage()
+								m.info = 1
+								m.Contacts = 0
+							},400)
+						},1200);
+					}
+					$("body").on("dblclick","img",function(){window.open(this.src)});
+				}
+			</script>
+			<script src="js/common.js"></script>
+	</body>
 </html>
