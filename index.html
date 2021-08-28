@@ -26,7 +26,6 @@
 
 				<!-- Main -->
 					<section id="main">
-						<span style="display: flex; position: fixed; top: 2em; right: 2em; opacity: 0.65; font-size: 0.8em;"><button class="button small" @click="screenShot" id="screenshot">保存网页截图</button></span>
 						<span style="display: flex; position: fixed; top: 2em; left: 2em; opacity: 0.65;" v-if="backButton"><button class="button small" onclick="toIndex()">&lt;返回</button></span>
 						<header>
 							<span class="avatar"><img src="assets/images/avatar.jpg" alt="" style="width: 122px; height: 122px;" /></span>
@@ -77,7 +76,7 @@
 
 						/*             Change Things Here            */
 						// Show on loaded
-						text:"<p>感谢您的支持，您可以在下方选择支持方式</p>",
+						text:"<p>感谢您的支持，您可以在下方选择支持方式，用对应APP扫码即可</p>",
 						// Payments
 						method:[
 							{
@@ -143,29 +142,6 @@
 							ele.style.transition = "all " + time + "s 0s"
 							ele.style.transform = "rotate" + axis + "(" +this.deg + "deg)"
 						},
-						screenShot: function(){
-							var button = document.getElementById("screenshot");
-							var imgbase64;
-							button.disabled = true;
-							button.innerHTML = "截图中…";
-							html2canvas(document.querySelector("body")).then(canvas => {
-								canvas.style.display="none";
-								document.body.appendChild(canvas);
-							});
-							setTimeout(function(){
-								imgbase64 = document.querySelector("canvas").toDataURL('image/jpg');
-								var w = window.open();
-								w.document.title = "保存截图";
-								var i = w.document.createElement("img");
-								w.document.body.appendChild(i);
-								i.src = imgbase64;
-								document.querySelector("canvas").remove();
-								w.alert("长按图片或直接保存图片即可");
-								button.innerHTML = "保存网页截图";
-								button.disabled = false;
-							},800);
-								
-						}
 					}
 				});
 			</script>
